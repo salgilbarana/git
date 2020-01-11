@@ -14,9 +14,12 @@ Schema.createSchema = function(mongoose) {
 	    email : {type: String,'default':''}
 		,hashed_password: {type: String, required: true, 'default':''}
 		,name: {type: String, index: 'hashed', 'default':''}
-	    ,salt: {type:String, required:true}
+	    ,salt: {type:String}
 	    ,created_at: {type: Date, index: {unique: false}, 'default': Date.now}
-	    ,updated_at: {type: Date, index: {unique: false}, 'default': Date.now}
+		,updated_at: {type: Date, index: {unique: false}, 'default': Date.now}
+		,provider : {type: String, 'default' : ''} //사용자 인증서비스를 제공하는 제공자 이름
+		,authToken : {type: String, 'default' : ''} // 인증서버에서 제공하는 access token값
+		,facebook : {} // 응답받은 사용자 정보 객체
 	});
 	
 	// password를 virtual 메소드로 정의 : MongoDB에 저장되지 않는 편리한 속성임. 특정 속성을 지정하고 set, get 메소드를 정의함
@@ -84,9 +87,9 @@ Schema.createSchema = function(mongoose) {
 		return email.length;
 	}, 'email 칼럼의 값이 없습니다.');
 	
-	UserSchema.path('hashed_password').validate(function (hashed_password) {
-		return hashed_password.length;
-	}, 'hashed_password 칼럼의 값이 없습니다.');
+	//UserSchema.path('hashed_password').validate(function (hashed_password) {
+	//	return hashed_password.length;
+	//}, 'hashed_password 칼럼의 값이 없습니다.');
 	
 	   
 	// 스키마에 static 메소드 추가
