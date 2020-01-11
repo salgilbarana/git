@@ -1,8 +1,5 @@
 /*
  * 설정 파일
- *
- * @date 2016-11-10
- * @author Mike
  */
 
 // local -> shopping
