@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Echo 테스트</title>
+		
+        <script src="./jquery-3.1.1.min.js"></script>
+         <!-- 제이쿼리 라이브러리 사용 -->
+		<script src="jquery.jsonrpc.js"></script>
+        <script>
+        // 제이쿼리 라이브러리가 로딩되면 자동 실행되는 함수 -->
+        // jsonRPC.setup : 기본설정을 할 수 있는-->
+        // endPoint : 접속할 서버의 url  -->
+        $(function(){
+            $.jsonRPC.setup({
+                endPoint : 'http://localhost:3000/api',
+                namespace: ''
+            });
+
+        $("#requestButton").click(function(){
+            var message = $("#messageInput").val();
+            var method = 'echo';
+            
+            //  $.jsonRPC.request : 서버에서 요청하는 함수
+            // method : 서버쪽 함수의 이름 echo
+            // 두번째 파라미터 : 전달할 데이터와 콜백함수들어 있는 객체
+            // 두번째 파라미터로 전달되는 속성들
+            // - id : 서버로부터 받은 응답을 구별하는 요청 id
+            // - params : 서버로 보낼 데이터를 넣는 배열 객체
+            // - success : 응답을 성공적으로 받았을때 호촐되는 콜백
+            // - error : 오류 응답을 받았을때 호출되는 콜백 함수
+            // data : 
+            // - id 요청할 때 전달한 id 값이 들어 있음
+            // - jsonrpc : json-rpc 스펙의 버전을 표기
+            // - result : 응답 데이터가 배열 객체로 들어 있음
+            $.jsonRPC.request(method,{
+                id : 1001,
+                params : [message],
+                success : function(data){
+                    println('정상 응답을 받았습니다. ');
+                    console.dir(data);
+                    println(data.result);
+                },
+                error: function(data){
+                    println('오류 응답을 받았습니다.');
+                    console.dir(data);
+                    println(data.error.message);
+                }
+            });
+            println('[' + method + '] method로 요청을 보냈습니다.');
+        });
+    });
+
+    function println(data){
+        $("#results").append('<p>' + data + '</p>');
+    }
+        </script>
+        
+
+	</head>
+	<body>
+
+        <h3>JSON-RPC Echo 테스트</h3>
+        <br>
+        <!-- textarea : 글자 입력 태그-->
+        <textarea name ="messageInput" id ="messageInput"></textarea>
+        <br>
+        <input type="button" name="requestButton" id="requestButton" value="요청하기">
+        <br>
+        <p>결과</p>
+        <div id="results"></div>
+			 
+	</body>
+</html>
